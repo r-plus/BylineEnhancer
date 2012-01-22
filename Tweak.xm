@@ -4,7 +4,7 @@
 -(BLTweet *)initWithURL:(NSURL *)url text:(NSString *)selectedText
 {
   BLGoogleReaderItem *item = [[[[UIApplication sharedApplication] delegate] itemViewController] item];
-  NSMutableString *string = [NSMutableString stringWithFormat:@"%@ \"%@ - %@\"", selectedText, [item source], [item title]];
+  NSString *string = [NSString stringWithFormat:@"%@ \"%@ - %@\"", selectedText, [item source], [item title]];
   return %orig(url, string);
 }
 %end
