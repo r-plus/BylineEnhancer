@@ -1,0 +1,10 @@
+Package: jp.r-plus.bylinetweetformatter
+Name: BylineTweetFormatter
+Depends: mobilesubstrate
+Version: 0.0.1
+Architecture: iphoneos-arm
+Description: auto insert title and source
+Maintainer: r_plus
+Author: r_plus
+Section: Tweaks
+dev: rplus
