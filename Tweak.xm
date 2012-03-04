@@ -20,7 +20,7 @@
   [tv setSelectionToStart];
 }
 %end
-*/
+
 %hook BLGoogleReader
 - (void)setSyncDate:(NSDate *)date
 {
@@ -40,3 +40,4 @@
   [notification release];
 }
 %end
+*/
