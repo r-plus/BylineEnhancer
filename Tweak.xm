@@ -26,17 +26,17 @@
 {
   %orig;
   UILocalNotification *notification = [[UILocalNotification alloc] init];
-  [notification setFireDate:[NSDate date]];
+  //[notification setFireDate:[NSDate date]];
   [notification setTimeZone:[NSTimeZone localTimeZone]];
   NSDateFormatter *dateFormatter = [[[NSDateFormatter alloc] init] autorelease];
   [dateFormatter setDateFormat:@"Y/M/d H:m:ss Z"];
   // http://d.hatena.ne.jp/nakamura001/20100525/1274802305
   //NSLog(@"descriptionWithLocale = %@", [date descriptionWithLocale:[NSLocale currentLocale]]);
   //NSLog(@"formatter = %@", [dateFormatter stringFromDate:date]);
-  [notification setAlertBody:[NSString stringWithFormat:@"Synced at %@", [dateFormatter stringFromDate:[NSDate date]]]];
+  [notification setAlertBody:[NSString stringWithFormat:@"Synced at %@", [dateFormatter stringFromDate:date]]];
   [notification setSoundName:UILocalNotificationDefaultSoundName];
   [notification setAlertAction:@"Open"];
-  [[UIApplication sharedApplication] scheduleLocalNotification:notification];
+  [[UIApplication sharedApplication] presentLocalNotificationNow:notification];
   [notification release];
 }
 %end
