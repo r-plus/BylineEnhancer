@@ -1,4 +1,3 @@
-//#import <subjc.h>
 @class BLGoogleReaderItem;
 
 %hook BLTweet
@@ -9,7 +8,7 @@
   return %orig(url, string);
 }
 %end
-/*
+
 %hook BLTweetViewController
 - (void)fixSelectedRange
 {
@@ -17,17 +16,16 @@
   //BLTweet *tweet = [self tweet];
   UITextView *tv = MSHookIvar<UITextView *>(self, "_textView");
   [tv setSelectionToStart];
-  [tv insertText:@" "];
-  [tv setSelectionToStart];
+  //[tv insertText:@" "];
+  //[tv setSelectionToStart];
 }
 %end
-*/
+
 %hook BLApplicationController
 - (void)googleReader:(id)reader didCacheItem:(id)item number:(int)number ofTotal:(int)total
 {
   if (number == total) {
     UILocalNotification *notification = [[UILocalNotification alloc] init];
-    //[notification setFireDate:[NSDate date]];
     [notification setTimeZone:[NSTimeZone localTimeZone]];
     NSDate *date = [NSDate date];
     NSDateFormatter *dateFormatter = [[[NSDateFormatter alloc] init] autorelease];
