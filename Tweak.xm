@@ -13,7 +13,8 @@
 - (void)fixSelectedRange
 {
   %orig;
-  //BLTweet *tweet = [self tweet];
+  BLTweet *tweet = [self tweet];
+  [[%c(BLWebServices) sharedInstance] shortenTweet:tweet];
   UITextView *tv = MSHookIvar<UITextView *>(self, "_textView");
   [tv setSelectionToStart];
   //[tv insertText:@" "];
