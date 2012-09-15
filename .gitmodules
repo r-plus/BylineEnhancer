@@ -1,0 +1,3 @@
+[submodule "AllAroundPullView"]
+	path = AllAroundPullView
+	url = git@github.com:r-plus/AllAroundPullView.git
