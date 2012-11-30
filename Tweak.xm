@@ -2,6 +2,11 @@
 
 #define PREF_PATH @"/var/mobile/Library/Preferences/jp.r-plus.bylineenhancer.plist"
 
+@interface AllAroundPullViewActionHandler : NSObject <AllAroundPullViewDelegate>
+@end
+
+static AllAroundPullViewActionHandler *pullViewActionHandler;
+
 static AllAroundPullView *rootPullViewTop = nil;
 static AllAroundPullView *listPullViewTop = nil;
 static AllAroundPullView *listPullViewBottom = nil;
@@ -116,6 +121,42 @@ static void DoPullToAction (NSUInteger actionNumber)
   }
 }
 
+@implementation AllAroundPullViewActionHandler
+- (void)pullViewShouldRefresh:(AllAroundPullView *)view
+{
+  NSUInteger actionNumber;
+  switch (view.tag) {
+    case 1111:
+      actionNumber = 0;
+      break;
+    case 2222:
+      actionNumber = listPullViewTopAction;
+      break;
+    case 3333:
+      actionNumber = listPullViewBottomAction;
+      break;
+    case 4444:
+      actionNumber = feedPullViewLeftAction;
+      break;
+    case 5555:
+      actionNumber = feedPullViewRightAction;
+      break;
+    case 6666:
+      actionNumber = feedPullViewTopAction;
+      break;
+    case 7777:
+      actionNumber = feedPullViewBottomAction;
+      break;
+    default:
+      actionNumber = 0;
+      break;
+  };
+
+  DoPullToAction(actionNumber);
+  [view performSelector:@selector(finishedLoading) withObject:nil afterDelay:0.0f];
+}
+@end
+
 // TweetFormatter
 %hook BLTweet
 - (BLTweet *)initWithURL:(NSURL *)url text:(NSString *)selectedText
@@ -176,10 +217,9 @@ static void DoPullToAction (NSUInteger actionNumber)
   UITableView *tableView = [self tableView];
 
   // Root Top Sync
-  rootPullViewTop = [[AllAroundPullView alloc] initWithScrollView:tableView position:AllAroundPullViewPositionTop action:^(AllAroundPullView *view){
-    DoPullToAction(0);
-    [view performSelector:@selector(finishedLoading) withObject:nil afterDelay:0.0f];
-  }];
+  rootPullViewTop = [[AllAroundPullView alloc] initWithScrollView:tableView position:AllAroundPullViewPositionTop];
+  rootPullViewTop.delegate = pullViewActionHandler;
+  rootPullViewTop.tag = 1111;
   [tableView addSubview:rootPullViewTop];
 
   hidePullView();
@@ -203,17 +243,15 @@ static void DoPullToAction (NSUInteger actionNumber)
   UITableView *tableView = [self tableView];
 
   // FeedList Top
-  listPullViewTop = [[AllAroundPullView alloc] initWithScrollView:tableView position:AllAroundPullViewPositionTop action:^(AllAroundPullView *view){
-    DoPullToAction(listPullViewTopAction);
-    [view performSelector:@selector(finishedLoading) withObject:nil afterDelay:0.0f];
-  }];
+  listPullViewTop = [[AllAroundPullView alloc] initWithScrollView:tableView position:AllAroundPullViewPositionTop];
+  listPullViewTop.delegate = pullViewActionHandler;
+  listPullViewTop.tag = 2222;
   [tableView addSubview:listPullViewTop];
 
   // FeedList Bottom
-  listPullViewBottom = [[AllAroundPullView alloc] initWithScrollView:tableView position:AllAroundPullViewPositionBottom action:^(AllAroundPullView *view){
-    DoPullToAction(listPullViewBottomAction);
-    [view performSelector:@selector(finishedLoading) withObject:nil afterDelay:0.0f];
-  }];
+  listPullViewBottom = [[AllAroundPullView alloc] initWithScrollView:tableView position:AllAroundPullViewPositionBottom];
+  listPullViewBottom.delegate = pullViewActionHandler;
+  listPullViewBottom.tag = 3333;
   [tableView addSubview:listPullViewBottom];
 
   hidePullView();
@@ -249,17 +287,15 @@ static void DoPullToAction (NSUInteger actionNumber)
   }
 
   // WebView Left
-  feedPullViewLeft = [[AllAroundPullView alloc] initWithScrollView:sv position:AllAroundPullViewPositionLeft action:^(AllAroundPullView *view){
-    DoPullToAction(feedPullViewLeftAction);
-    [view performSelector:@selector(finishedLoading) withObject:nil afterDelay:0.0f];
-  }];
+  feedPullViewLeft = [[AllAroundPullView alloc] initWithScrollView:sv position:AllAroundPullViewPositionLeft];
+  feedPullViewLeft.delegate = pullViewActionHandler;
+  feedPullViewLeft.tag = 4444;
   [sv addSubview:feedPullViewLeft];
 
   // WebView Right
-  feedPullViewRight = [[AllAroundPullView alloc] initWithScrollView:sv position:AllAroundPullViewPositionRight action:^(AllAroundPullView *view){
-    DoPullToAction(feedPullViewRightAction);
-    [view performSelector:@selector(finishedLoading) withObject:nil afterDelay:0.0f];
-  }];
+  feedPullViewRight = [[AllAroundPullView alloc] initWithScrollView:sv position:AllAroundPullViewPositionRight];
+  feedPullViewRight.delegate = pullViewActionHandler;
+  feedPullViewRight.tag = 5555;
   [sv addSubview:feedPullViewRight];
 
   hidePullView();
@@ -287,10 +323,9 @@ static void DoPullToAction (NSUInteger actionNumber)
         vwebHasAllAroundPullViewPositionTop = YES;
 
   if (!vwebHasAllAroundPullViewPositionTop) {
-    feedPullViewTop = [[AllAroundPullView alloc] initWithScrollView:sv position:AllAroundPullViewPositionTop action:^(AllAroundPullView *view){
-      DoPullToAction(feedPullViewTopAction);
-      [view performSelector:@selector(finishedLoading) withObject:nil afterDelay:0.0f];
-    }];
+    feedPullViewTop = [[AllAroundPullView alloc] initWithScrollView:sv position:AllAroundPullViewPositionTop];
+    feedPullViewTop.delegate = pullViewActionHandler;
+    feedPullViewTop.tag = 6666;
     [sv addSubview:feedPullViewTop];
     [feedPullViewTop release];
   }
@@ -303,11 +338,9 @@ static void DoPullToAction (NSUInteger actionNumber)
         vwebHasAllAroundPullViewPositionBottom = YES;
 
   if (!vwebHasAllAroundPullViewPositionBottom) {
-    feedPullViewBottom = [[AllAroundPullView alloc] initWithScrollView:sv position:AllAroundPullViewPositionBottom action:^(AllAroundPullView *view){
-      DoPullToAction(feedPullViewBottomAction);
-/*      [self performSelectorOnMainThread:@selector(linkAction:) withObject:nil waitUntilDone:YES];*/
-      [view performSelector:@selector(finishedLoading) withObject:nil afterDelay:0.0f];
-    }];
+    feedPullViewBottom = [[AllAroundPullView alloc] initWithScrollView:sv position:AllAroundPullViewPositionBottom];
+    feedPullViewBottom.delegate = pullViewActionHandler;
+    feedPullViewBottom.tag = 7777;
     [sv addSubview:feedPullViewBottom];
     [feedPullViewBottom release];
   }
@@ -378,5 +411,6 @@ static void PostNotification(CFNotificationCenterRef center, void *observer, CFS
   NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
   CFNotificationCenterAddObserver(CFNotificationCenterGetDarwinNotifyCenter(), NULL, PostNotification, CFSTR("jp.r-plus.BylineEnhancer.settingschanged"), NULL, CFNotificationSuspensionBehaviorCoalesce);
   LoadSettings();
+  pullViewActionHandler = [[AllAroundPullViewActionHandler alloc] init];
   [pool release];
 }
