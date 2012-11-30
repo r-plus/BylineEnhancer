@@ -39,8 +39,13 @@ static NSUInteger feedPullViewRightAction;
 
 @class BLGoogleReaderItem;
 
+@interface BLItemViewController
+- (BLGoogleReaderItem *)item;
+- (void)linkAction:(id)button;
+@end
+
 @interface BLApplicationController
-- (id)itemViewController;
+- (BLItemViewController *)itemViewController;
 - (void)synchroniseAction:(id)button;
 - (id)synchroniseButtonItem;
 - (id)item;
@@ -162,7 +167,7 @@ static void DoPullToAction (NSUInteger actionNumber)
 - (BLTweet *)initWithURL:(NSURL *)url text:(NSString *)selectedText
 {
   if (tweetFormatterIsEnabled) {
-    BLGoogleReaderItem *item = [[(BLApplicationController *)[[UIApplication sharedApplication] delegate] itemViewController] item];
+    BLGoogleReaderItem *item = [[((BLApplicationController *)[[UIApplication sharedApplication] delegate]) itemViewController] item];
     NSString *string = [NSString stringWithFormat:@"%@ \"%@ - %@", selectedText, [item source], [item title]];
     return %orig(url, string);
   } else {
