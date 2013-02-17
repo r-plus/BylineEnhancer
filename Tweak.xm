@@ -163,6 +163,36 @@ static void DoPullToAction (NSUInteger actionNumber)
 @end
 
 // TweetFormatter
+%hook UIActivityViewController
+- (id)initWithActivityItems:(NSArray *)activityItems applicationActivities:(NSArray *)applicationActivities
+{
+  if (!tweetFormatterIsEnabled)
+    return %orig;
+
+  BLGoogleReaderItem *item = nil;
+  NSString *string = nil;
+  if ([activityItems count] == 1) {
+    // 1 is only BLGoogleReaderItem
+    for (id i in activityItems)
+      if ([i isMemberOfClass:%c(BLGoogleReaderItem)])
+        item = i;
+    string = [NSString stringWithFormat:@"\"%@ - %@", [item source], [item title]];
+  } else {
+    // 2 is NSString and BLGoogleReaderItem ("Send" menu action)
+    NSString *selectedText = nil;
+    for (id i in activityItems) {
+      if ([i isMemberOfClass:%c(BLGoogleReaderItem)])
+        item = i;
+      if ([i isKindOfClass:[NSString class]])
+        selectedText = i;
+    }
+    string = [NSString stringWithFormat:@"%@ \"%@ - %@", selectedText, [item source], [item title]];
+  }
+  NSArray *array = @[string, item];
+  return %orig(array, applicationActivities);
+}
+%end
+
 %hook BLTweet
 - (BLTweet *)initWithURL:(NSURL *)url text:(NSString *)selectedText
 {

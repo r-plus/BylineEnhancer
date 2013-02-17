@@ -48,6 +48,14 @@
         <string>PSGroupCell</string>
         <key>label</key>
         <string>Root View</string>
+        <key>pl_filter</key>
+        <dict>
+          <key>CoreFoundationVersion</key>
+          <array>
+            <string>550.32</string>
+            <string>793.0</string>
+          </array>
+        </dict>
       </dict>
       <dict>
         <key>cell</key>
@@ -62,6 +70,14 @@
         <string>Enabled</string>
         <key>PostNotification</key>
         <string>jp.r-plus.BylineEnhancer.settingschanged</string>
+        <key>pl_filter</key>
+        <dict>
+          <key>CoreFoundationVersion</key>
+          <array>
+            <string>550.32</string>
+            <string>793.0</string>
+          </array>
+        </dict>
       </dict>
       <dict>
         <key>cell</key>
@@ -94,12 +110,28 @@
           <string>120</string>
           <string>140</string>
         </array>
+        <key>pl_filter</key>
+        <dict>
+          <key>CoreFoundationVersion</key>
+          <array>
+            <string>550.32</string>
+            <string>793.0</string>
+          </array>
+        </dict>
       </dict>
       <dict>
         <key>cell</key>
         <string>PSGroupCell</string>
         <key>label</key>
         <string>List View Top</string>
+        <key>pl_filter</key>
+        <dict>
+          <key>CoreFoundationVersion</key>
+          <array>
+            <string>550.32</string>
+            <string>793.0</string>
+          </array>
+        </dict>
       </dict>
       <dict>
         <key>cell</key>
@@ -114,6 +146,14 @@
         <string>Enabled</string>
         <key>PostNotification</key>
         <string>jp.r-plus.BylineEnhancer.settingschanged</string>
+        <key>pl_filter</key>
+        <dict>
+          <key>CoreFoundationVersion</key>
+          <array>
+            <string>550.32</string>
+            <string>793.0</string>
+          </array>
+        </dict>
       </dict>
       <dict>
         <key>cell</key>
@@ -146,6 +186,14 @@
           <string>120</string>
           <string>140</string>
         </array>
+        <key>pl_filter</key>
+        <dict>
+          <key>CoreFoundationVersion</key>
+          <array>
+            <string>550.32</string>
+            <string>793.0</string>
+          </array>
+        </dict>
       </dict>
       <dict>
         <key>cell</key>
@@ -176,6 +224,14 @@
           <string>2</string>
           <string>3</string>
         </array>
+        <key>pl_filter</key>
+        <dict>
+          <key>CoreFoundationVersion</key>
+          <array>
+            <string>550.32</string>
+            <string>793.0</string>
+          </array>
+        </dict>
       </dict>
       <dict>
         <key>cell</key>
