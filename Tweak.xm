@@ -111,7 +111,7 @@ static void DoPullToAction (NSUInteger actionNumber)
 
     case 2:
       // pop
-      [[[(BLApplicationController *)[[UIApplication sharedApplication] delegate] listViewController] navigationController] popToRootViewControllerAnimated:YES];
+      [[[(BLApplicationController *)[[UIApplication sharedApplication] delegate] listViewController] navigationController] popViewControllerAnimated:YES];
       break;
 
     case 3:
