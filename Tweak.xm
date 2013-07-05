@@ -9,35 +9,12 @@
 
 static AllAroundPullViewActionHandler *pullViewActionHandler;
 
-/*static AllAroundPullView *rootPullViewTop = nil;*/
-/*static AllAroundPullView *listPullViewTop = nil;*/
 static AllAroundPullView *listPullViewBottom = nil;
-/*static AllAroundPullView *feedPullViewTop = nil;*/
-/*static AllAroundPullView *feedPullViewBottom = nil;*/
-/*static AllAroundPullView *feedPullViewLeft = nil;*/
-/*static AllAroundPullView *feedPullViewRight = nil;*/
 
 static BOOL tweetFormatterIsEnabled;
-/*static BOOL rootPullViewTopIsEnabled;*/
-/*static BOOL listPullViewTopIsEnabled;*/
 static BOOL listPullViewBottomIsEnabled;
-/*static BOOL feedPullViewTopIsEnabled;*/
-/*static BOOL feedPullViewBottomIsEnabled;*/
-/*static BOOL feedPullViewLeftIsEnabled;*/
-/*static BOOL feedPullViewRightIsEnabled;*/
-/*static CGFloat rootPullViewTopThreshold;*/
-/*static CGFloat listPullViewTopThreshold;*/
 static CGFloat listPullViewBottomThreshold;
-/*static CGFloat feedPullViewTopThreshold;*/
-/*static CGFloat feedPullViewBottomThreshold;*/
-/*static CGFloat feedPullViewLeftThreshold;*/
-/*static CGFloat feedPullViewRightThreshold;*/
-/*static NSUInteger listPullViewTopAction;*/
 static NSUInteger listPullViewBottomAction;
-/*static NSUInteger feedPullViewTopAction;*/
-/*static NSUInteger feedPullViewBottomAction;*/
-/*static NSUInteger feedPullViewLeftAction;*/
-/*static NSUInteger feedPullViewRightAction;*/
 
 @class BLGoogleReaderItem;
 
@@ -77,25 +54,13 @@ static NSUInteger listPullViewBottomAction;
 static void hidePullView()
 {
     Log(@"----- hidePullView");
-/*    if ([rootPullViewTop respondsToSelector:@selector(hideAllAroundPullViewIfNeed:)]) [rootPullViewTop hideAllAroundPullViewIfNeed:rootPullViewTopIsEnabled ? NO : YES];*/
-/*    if ([listPullViewTop respondsToSelector:@selector(hideAllAroundPullViewIfNeed:)]) [listPullViewTop hideAllAroundPullViewIfNeed:listPullViewTopIsEnabled ? NO : YES];*/
     if ([listPullViewBottom respondsToSelector:@selector(hideAllAroundPullViewIfNeed:)]) [listPullViewBottom hideAllAroundPullViewIfNeed:listPullViewBottomIsEnabled ? NO : YES];
-/*    if ([feedPullViewTop respondsToSelector:@selector(hideAllAroundPullViewIfNeed:)]) [feedPullViewTop hideAllAroundPullViewIfNeed:feedPullViewTopIsEnabled ? NO : YES];*/
-/*    if ([feedPullViewBottom respondsToSelector:@selector(hideAllAroundPullViewIfNeed:)]) [feedPullViewBottom hideAllAroundPullViewIfNeed:feedPullViewBottomIsEnabled ? NO : YES];*/
-/*    if ([feedPullViewLeft respondsToSelector:@selector(hideAllAroundPullViewIfNeed:)]) [feedPullViewLeft hideAllAroundPullViewIfNeed:feedPullViewLeftIsEnabled ? NO : YES];*/
-/*    if ([feedPullViewRight respondsToSelector:@selector(hideAllAroundPullViewIfNeed:)]) [feedPullViewRight hideAllAroundPullViewIfNeed:feedPullViewRightIsEnabled ? NO : YES];*/
 }
 
 static void updateThreadhold()
 {
     Log(@"----- updateThreadhold");
-/*    if ([rootPullViewTop isMemberOfClass:[AllAroundPullView class]]) rootPullViewTop.threshold = rootPullViewTopThreshold;*/
-/*    if ([listPullViewTop isMemberOfClass:[AllAroundPullView class]]) listPullViewTop.threshold = listPullViewTopThreshold;*/
     if ([listPullViewBottom isMemberOfClass:[AllAroundPullView class]]) listPullViewBottom.threshold = listPullViewBottomThreshold;
-/*    if ([feedPullViewTop isMemberOfClass:[AllAroundPullView class]]) feedPullViewTop.threshold = feedPullViewTopThreshold;*/
-/*    if ([feedPullViewBottom isMemberOfClass:[AllAroundPullView class]]) feedPullViewBottom.threshold = feedPullViewBottomThreshold;*/
-/*    if ([feedPullViewLeft isMemberOfClass:[AllAroundPullView class]]) feedPullViewLeft.threshold = feedPullViewLeftThreshold;*/
-/*    if ([feedPullViewRight isMemberOfClass:[AllAroundPullView class]]) feedPullViewRight.threshold = feedPullViewRightThreshold;*/
 }
 
 static void DoPullToAction (NSUInteger actionNumber)
@@ -137,27 +102,9 @@ static void DoPullToAction (NSUInteger actionNumber)
     Log(@"----- pullViewActionHandler");
     NSUInteger actionNumber;
     switch (view.tag) {
-/*        case 1111:*/
-/*            actionNumber = 0;*/
-/*            break;*/
-/*        case 2222:*/
-/*            actionNumber = listPullViewTopAction;*/
-/*            break;*/
         case 3333:
             actionNumber = listPullViewBottomAction;
             break;
-/*        case 4444:*/
-/*            actionNumber = feedPullViewLeftAction;*/
-/*            break;*/
-/*        case 5555:*/
-/*            actionNumber = feedPullViewRightAction;*/
-/*            break;*/
-/*        case 6666:*/
-/*            actionNumber = feedPullViewTopAction;*/
-/*            break;*/
-/*        case 7777:*/
-/*            actionNumber = feedPullViewBottomAction;*/
-/*            break;*/
         default:
             actionNumber = 0;
             break;
@@ -266,46 +213,12 @@ static void DoPullToAction (NSUInteger actionNumber)
 }
 %end
 
-/*%hook BLRootViewController*/
-/*- (void)viewDidLoad*/
-/*{*/
-/*    Log(@"----- rootview viewDidLoad");*/
-/*    %orig;*/
-/*    UITableView *tableView = [self tableView];*/
-
-/*    // Root Top Sync*/
-/*    rootPullViewTop = [[AllAroundPullView alloc] initWithScrollView:tableView position:AllAroundPullViewPositionTop];*/
-/*    rootPullViewTop.delegate = pullViewActionHandler;*/
-/*    rootPullViewTop.tag = 1111;*/
-/*    [tableView addSubview:rootPullViewTop];*/
-
-/*    hidePullView();*/
-/*    updateThreadhold();*/
-/*}*/
-
-/*- (void)didReceiveMemoryWarning*/
-/*{*/
-/*    %orig;*/
-/*    if (rootPullViewTop) {*/
-/*        [rootPullViewTop removeFromSupoerview];*/
-/*        [rootPullViewTop release];*/
-/*        rootPullViewTop = nil;*/
-/*    }*/
-/*}*/
-/*%end*/
-
 %hook BLListViewController
 - (void)viewDidLoad
 {
     Log(@"----- listview viewDidLoad");
     %orig;
     UITableView *tableView = [self tableView];
-
-/*    // FeedList Top*/
-/*    listPullViewTop = [[AllAroundPullView alloc] initWithScrollView:tableView position:AllAroundPullViewPositionTop];*/
-/*    listPullViewTop.delegate = pullViewActionHandler;*/
-/*    listPullViewTop.tag = 2222;*/
-/*    [tableView addSubview:listPullViewTop];*/
 
     // FeedList Bottom
     listPullViewBottom = [[AllAroundPullView alloc] initWithScrollView:tableView position:AllAroundPullViewPositionBottom];
@@ -321,11 +234,6 @@ static void DoPullToAction (NSUInteger actionNumber)
 {
     Log(@"----- listview viewDidUnLoad");
     %orig;
-/*    if (listPullViewTop) {*/
-/*        [listPullViewTop removeFromSuperview];*/
-/*        [listPullViewTop release];*/
-/*        listPullViewTop = nil;*/
-/*    }*/
     if (listPullViewBottom) {
         [listPullViewBottom removeFromSuperview];
         [listPullViewBottom release];
@@ -334,139 +242,17 @@ static void DoPullToAction (NSUInteger actionNumber)
 }
 %end
 
-/*%hook BLWebScrollView*/
-/*- (id)initWithFrame:(CGRect)frame*/
-/*{*/
-/*    Log(@"----- webscrollview for left/right initWithFrame");*/
-/*    UIScrollView *sv = %orig;*/
-
-/*    if ([feedPullViewLeft retainCount] == 1) {*/
-/*        Log(@"----- purging left view");*/
-/*        [feedPullViewLeft release];*/
-/*        feedPullViewLeft = nil;*/
-/*    }*/
-/*    if ([feedPullViewRight retainCount] == 1) {*/
-/*        Log(@"----- purging right view");*/
-/*        [feedPullViewRight release];*/
-/*        feedPullViewRight = nil;*/
-/*    }*/
-
-/*    // WebView Left*/
-/*    feedPullViewLeft = [[AllAroundPullView alloc] initWithScrollView:sv position:AllAroundPullViewPositionLeft];*/
-/*    feedPullViewLeft.delegate = pullViewActionHandler;*/
-/*    feedPullViewLeft.tag = 4444;*/
-/*    [sv addSubview:feedPullViewLeft];*/
-
-/*    // WebView Right*/
-/*    feedPullViewRight = [[AllAroundPullView alloc] initWithScrollView:sv position:AllAroundPullViewPositionRight];*/
-/*    feedPullViewRight.delegate = pullViewActionHandler;*/
-/*    feedPullViewRight.tag = 5555;*/
-/*    [sv addSubview:feedPullViewRight];*/
-
-/*    hidePullView();*/
-/*    updateThreadhold();*/
-
-/*    return sv;*/
-/*}*/
-/*%end*/
-
-/*%hook BLItemViewController*/
-/*- (void)layoutWebViews*/
-/*{*/
-/*    Log(@"----- itemViewController top/bottom view");*/
-/*    %orig;*/
-/*    // BLItemWebView.*/
-/*    UIWebView *vweb = MSHookIvar<UIWebView *>(self, "_visibleWebView");*/
-/*    UIScrollView *sv = nil;*/
-/*    if ([vweb respondsToSelector:@selector(_scrollView)])*/
-/*        sv = [vweb _scrollView];*/
-
-/*    Log(@"vweb = %@, sv = %@", vweb, sv);*/
-/*    // WebView Top*/
-/*    BOOL vwebHasAllAroundPullViewPositionTop = NO;*/
-/*    for (AllAroundPullView *v in sv.subviews)*/
-/*        if ([v isMemberOfClass:[AllAroundPullView class]])*/
-/*            if (v.position == AllAroundPullViewPositionTop)*/
-/*                vwebHasAllAroundPullViewPositionTop = YES;*/
-
-/*    if (!vwebHasAllAroundPullViewPositionTop) {*/
-/*        Log(@"----- top addSubview");*/
-/*        feedPullViewTop = [[AllAroundPullView alloc] initWithScrollView:sv position:AllAroundPullViewPositionTop];*/
-/*        feedPullViewTop.delegate = pullViewActionHandler;*/
-/*        feedPullViewTop.tag = 6666;*/
-/*        [sv addSubview:feedPullViewTop];*/
-/*        [feedPullViewTop release];*/
-/*    }*/
-
-/*    // WebView Bottom*/
-/*    BOOL vwebHasAllAroundPullViewPositionBottom = NO;*/
-/*    for (AllAroundPullView *v in sv.subviews)*/
-/*        if ([v isMemberOfClass:[AllAroundPullView class]])*/
-/*            if (v.position == AllAroundPullViewPositionBottom)*/
-/*                vwebHasAllAroundPullViewPositionBottom = YES;*/
-
-/*    if (!vwebHasAllAroundPullViewPositionBottom) {*/
-/*        Log(@"----- bottom addSubview");*/
-/*        feedPullViewBottom = [[AllAroundPullView alloc] initWithScrollView:sv position:AllAroundPullViewPositionBottom];*/
-/*        feedPullViewBottom.delegate = pullViewActionHandler;*/
-/*        feedPullViewBottom.tag = 7777;*/
-/*        [sv addSubview:feedPullViewBottom];*/
-/*        [feedPullViewBottom release];*/
-/*    }*/
-
-/*    hidePullView();*/
-/*    updateThreadhold();*/
-/*    Log(@"----- itemViewController end");*/
-/*}*/
-/*%end*/
-
 static void LoadSettings()
 {   
     NSDictionary *dict = [NSDictionary dictionaryWithContentsOfFile:PREF_PATH];
     id existTweetFormatterIsEnabled = [dict objectForKey:@"TweetFormatterIsEnabled"];
     tweetFormatterIsEnabled = existTweetFormatterIsEnabled ? [existTweetFormatterIsEnabled boolValue] : YES;
-/*    id existRootPullViewTopIsEnabled = [dict objectForKey:@"RootPullViewTopIsEnabled"];*/
-/*    rootPullViewTopIsEnabled = existRootPullViewTopIsEnabled ? [existRootPullViewTopIsEnabled boolValue] : NO;*/
-/*    id existListPullViewTopIsEnabled = [dict objectForKey:@"ListPullViewTopIsEnabled"];*/
-/*    listPullViewTopIsEnabled = existListPullViewTopIsEnabled ? [existListPullViewTopIsEnabled boolValue] : NO;*/
     id existListPullViewBottomIsEnabled = [dict objectForKey:@"ListPullViewBottomIsEnabled"];
     listPullViewBottomIsEnabled = existListPullViewBottomIsEnabled ? [existListPullViewBottomIsEnabled boolValue] : YES;
-/*    id existFeedPullViewTopIsEnabled = [dict objectForKey:@"FeedPullViewTopIsEnabled"];*/
-/*    feedPullViewTopIsEnabled = existFeedPullViewTopIsEnabled ? [existFeedPullViewTopIsEnabled boolValue] : YES;*/
-/*    id existFeedPullViewBottomIsEnabled = [dict objectForKey:@"FeedPullViewBottomIsEnabled"];*/
-/*    feedPullViewBottomIsEnabled = existFeedPullViewBottomIsEnabled ? [existFeedPullViewBottomIsEnabled boolValue] : YES;*/
-/*    id existFeedPullViewLeftIsEnabled = [dict objectForKey:@"FeedPullViewLeftIsEnabled"];*/
-/*    feedPullViewLeftIsEnabled = existFeedPullViewLeftIsEnabled ? [existFeedPullViewLeftIsEnabled boolValue] : YES;*/
-/*    id existFeedPullViewRightIsEnabled = [dict objectForKey:@"FeedPullViewRightIsEnabled"];*/
-/*    feedPullViewRightIsEnabled = existFeedPullViewRightIsEnabled ? [existFeedPullViewRightIsEnabled boolValue] : YES;*/
-
-/*    id existRootPullViewTopThreshold = [dict objectForKey:@"RootPullViewTopThreshold"];*/
-/*    rootPullViewTopThreshold = existRootPullViewTopThreshold ? [existRootPullViewTopThreshold floatValue] : 60.0f;*/
-/*    id existListPullViewTopThreshold = [dict objectForKey:@"ListPullViewTopThreshold"];*/
-/*    listPullViewTopThreshold = existListPullViewTopThreshold ? [existListPullViewTopThreshold floatValue] : 60.0f;*/
     id existListPullViewBottomThreshold = [dict objectForKey:@"ListPullViewBottomThreshold"];
     listPullViewBottomThreshold = existListPullViewBottomThreshold ? [existListPullViewBottomThreshold floatValue] : 100.0f;
-/*    id existFeedPullViewTopThreshold = [dict objectForKey:@"FeedPullViewTopThreshold"];*/
-/*    feedPullViewTopThreshold = existFeedPullViewTopThreshold ? [existFeedPullViewTopThreshold floatValue] : 60.0f;*/
-/*    id existFeedPullViewBottomThreshold = [dict objectForKey:@"FeedPullViewBottomThreshold"];*/
-/*    feedPullViewBottomThreshold = existFeedPullViewBottomThreshold ? [existFeedPullViewBottomThreshold floatValue] : 60.0f;*/
-/*    id existFeedPullViewLeftThreshold = [dict objectForKey:@"FeedPullViewLeftThreshold"];*/
-/*    feedPullViewLeftThreshold = existFeedPullViewLeftThreshold ? [existFeedPullViewLeftThreshold floatValue] : 60.0f;*/
-/*    id existFeedPullViewRightThreshold = [dict objectForKey:@"FeedPullViewRightThreshold"];*/
-/*    feedPullViewRightThreshold = existFeedPullViewRightThreshold ? [existFeedPullViewRightThreshold floatValue] : 60.0f;*/
-
-/*    id existListPullViewTopAction = [dict objectForKey:@"ListPullViewTopAction"];*/
-/*    listPullViewTopAction = existListPullViewTopAction ? [existListPullViewTopAction intValue] : 0; // sync*/
     id existListPullViewBottomAction = [dict objectForKey:@"ListPullViewBottomAction"];
     listPullViewBottomAction = existListPullViewBottomAction ? [existListPullViewBottomAction intValue] : 1; // markAllAsRead
-/*    id existFeedPullViewTopAction = [dict objectForKey:@"FeedPullViewTopAction"];*/
-/*    feedPullViewTopAction = existFeedPullViewTopAction ? [existFeedPullViewTopAction intValue] : 2; // pop*/
-/*    id existFeedPullViewBottomAction = [dict objectForKey:@"FeedPullViewBottomAction"];*/
-/*    feedPullViewBottomAction = existFeedPullViewBottomAction ? [existFeedPullViewBottomAction intValue] : 4; // link cache*/
-/*    id existFeedPullViewLeftAction = [dict objectForKey:@"FeedPullViewLeftAction"];*/
-/*    feedPullViewLeftAction = existFeedPullViewLeftAction ? [existFeedPullViewLeftAction intValue] : 3; // pop to root*/
-/*    id existFeedPullViewRightAction = [dict objectForKey:@"FeedPullViewRightAction"];*/
-/*    feedPullViewRightAction = existFeedPullViewRightAction ? [existFeedPullViewRightAction intValue] : 3; // pop to root*/
 
     hidePullView();
     updateThreadhold();
