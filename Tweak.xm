@@ -51,6 +51,9 @@ static NSUInteger listPullViewBottomAction;
 - (UIScrollView *)_scrollView;
 @end
 
+/////////////////////////////////////////////////////////////////////////////
+// functions for pull to action
+/////////////////////////////////////////////////////////////////////////////
 static void hidePullView()
 {
     Log(@"----- hidePullView");
@@ -115,7 +118,16 @@ static void DoPullToAction (NSUInteger actionNumber)
 }
 @end
 
+/////////////////////////////////////////////////////////////////////////////
+// disable summary.
+/////////////////////////////////////////////////////////////////////////////
+%hook BLItemTableViewCell
+- (void)setSummary:(id)summary {}
+%end
+
+/////////////////////////////////////////////////////////////////////////////
 // TweetFormatter
+/////////////////////////////////////////////////////////////////////////////
 %hook UIActivityViewController
 - (id)initWithActivityItems:(NSArray *)activityItems applicationActivities:(NSArray *)applicationActivities
 {
@@ -174,7 +186,7 @@ static void DoPullToAction (NSUInteger actionNumber)
 %end
 
 // for iOS 4 and 5.
-// Forced url shorten and set caret
+// Forced url shorten and set caret to top.
 %hook BLTweetViewController
 - (void)fixSelectedRange
 {
@@ -190,6 +202,9 @@ static void DoPullToAction (NSUInteger actionNumber)
 }
 %end
 
+/////////////////////////////////////////////////////////////////////////////
+// Pull to
+/////////////////////////////////////////////////////////////////////////////
 %hook BLListViewController
 - (void)viewDidLoad
 {
@@ -240,9 +255,9 @@ static void PostNotification(CFNotificationCenterRef center, void *observer, CFS
 }
 
 %ctor {
-    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-    CFNotificationCenterAddObserver(CFNotificationCenterGetDarwinNotifyCenter(), NULL, PostNotification, CFSTR("jp.r-plus.BylineEnhancer.settingschanged"), NULL, CFNotificationSuspensionBehaviorCoalesce);
-    LoadSettings();
-    pullViewActionHandler = [[AllAroundPullViewActionHandler alloc] init];
-    [pool release];
+    @autoreleasepool {
+        CFNotificationCenterAddObserver(CFNotificationCenterGetDarwinNotifyCenter(), NULL, PostNotification, CFSTR("jp.r-plus.BylineEnhancer.settingschanged"), NULL, CFNotificationSuspensionBehaviorCoalesce);
+        LoadSettings();
+        pullViewActionHandler = [[AllAroundPullViewActionHandler alloc] init];
+    }
 }
