@@ -190,29 +190,6 @@ static void DoPullToAction (NSUInteger actionNumber)
 }
 %end
 
-// Notification
-%hook BLApplicationController
-- (void)googleReader:(id)reader didCacheItem:(id)item number:(int)number ofTotal:(int)total
-{
-    if (number == total) {
-        UILocalNotification *notification = [[UILocalNotification alloc] init];
-        [notification setTimeZone:[NSTimeZone localTimeZone]];
-        NSDate *date = [NSDate date];
-        NSDateFormatter *dateFormatter = [[[NSDateFormatter alloc] init] autorelease];
-        [dateFormatter setDateFormat:@"Y/M/d H:m:ss Z"];
-        // http://d.hatena.ne.jp/nakamura001/20100525/1274802305
-        //NSLog(@"descriptionWithLocale = %@", [date descriptionWithLocale:[NSLocale currentLocale]]);
-        //NSLog(@"formatter = %@", [dateFormatter stringFromDate:date]);
-        [notification setAlertBody:[NSString stringWithFormat:@"Synced at %@", [dateFormatter stringFromDate:date]]];
-        [notification setSoundName:UILocalNotificationDefaultSoundName];
-        [notification setAlertAction:@"Open"];
-        [[UIApplication sharedApplication] presentLocalNotificationNow:notification];
-        [notification release];
-    }
-    %orig;
-}
-%end
-
 %hook BLListViewController
 - (void)viewDidLoad
 {
