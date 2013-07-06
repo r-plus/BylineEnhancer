@@ -160,7 +160,7 @@ static void DoPullToAction (NSUInteger actionNumber)
 }
 %end
 
-static UIView *TweetTextView(UIView *view)
+static id TweetTextView(UIView *view)
 {
     if ([view isFirstResponder])
         return view;
