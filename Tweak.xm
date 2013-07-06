@@ -178,6 +178,8 @@ static id TweetTextView(UIView *view)
 - (void)layoutSubviews
 {
     %orig;
+    if (!tweetFormatterIsEnabled)
+        return %orig;
 
     if ([self isMemberOfClass:%c(SLTwitterExpandedHitTestView)]) {
         UITextView *textView = TweetTextView([UIApplication sharedApplication].keyWindow);
