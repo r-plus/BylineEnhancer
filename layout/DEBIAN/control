@@ -1,7 +1,7 @@
 Package: jp.r-plus.bylineenhancer
 Name: BylineEnhancer
 Depends: mobilesubstrate, preferenceloader
-Version: 0.0.8
+Version: 0.0.9
 Architecture: iphoneos-arm
 Description: Enhance the Byline.app
 Maintainer: r_plus
