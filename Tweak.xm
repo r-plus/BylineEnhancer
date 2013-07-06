@@ -153,7 +153,8 @@ static void DoPullToAction (NSUInteger actionNumber)
             item = i;
     }
 
-    NSString *string = [NSString stringWithFormat:@"%@ \"%@ - %@", [item selection] ?: @"", [[item associatedItem] source], [item title]];
+    NSString *source = [[item associatedItem] source];
+    NSString *string = [NSString stringWithFormat:@"%@ \"%@%@%@", [item selection] ?: @"", source ?: @"", source ? @" - " : @"", [item title]];
     NSArray *array = @[string, item];
 
     return %orig(array, applicationActivities);
