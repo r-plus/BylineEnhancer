@@ -8,7 +8,6 @@
 @end
 
 static AllAroundPullViewActionHandler *pullViewActionHandler;
-
 static AllAroundPullView *listPullViewBottom = nil;
 
 static BOOL tweetFormatterIsEnabled;
@@ -49,6 +48,16 @@ static NSUInteger listPullViewBottomAction;
 
 @interface UIWebView(iOS4Private)
 - (UIScrollView *)_scrollView;
+@end
+
+@interface BLFeedlyItem
+@property(readonly, assign, nonatomic) NSString* source;
+@end
+
+@interface BLSendActivityItemSource
+@property(retain, nonatomic) BLFeedlyItem* associatedItem;
+@property(retain, nonatomic) NSString* selection;
+@property(retain, nonatomic) NSString* title;
 @end
 
 /////////////////////////////////////////////////////////////////////////////
@@ -135,69 +144,46 @@ static void DoPullToAction (NSUInteger actionNumber)
     if (!tweetFormatterIsEnabled)
         return %orig;
 
-    BLGoogleReaderItem *item = nil;
-    NSString *string = nil;
-    if ([activityItems count] == 1) {
-        // 1 is only BLGoogleReaderItem
-        for (id i in activityItems)
-            if ([i isMemberOfClass:%c(BLGoogleReaderItem)] || [i isMemberOfClass:%c(BLGoogleReaderProvisionalNote)])
-                item = i;
+    // BLSendActivityItemSource since 4.2.
+    BLSendActivityItemSource *item = nil;
 
-        if ([item isMemberOfClass:%c(BLGoogleReaderItem)])
-            string = [NSString stringWithFormat:@"\"%@ - %@", [item source], [item title]];
-        else
-            string = [item title];
-    } else {
-        // 2 is NSString and BLGoogleReaderItem ("Send" menu action)
-        NSString *selectedText = nil;
-        for (id i in activityItems) {
-            if ([i isMemberOfClass:%c(BLGoogleReaderItem)] || [i isMemberOfClass:%c(BLGoogleReaderProvisionalNote)])
-                item = i;
-            if ([i isKindOfClass:[NSString class]])
-                selectedText = i;
-        }
-        if ([item isMemberOfClass:%c(BLGoogleReaderItem)])
-            string = [NSString stringWithFormat:@"%@ \"%@ - %@", selectedText, [item source], [item title]];
-        else
-            string = [NSString stringWithFormat:@"%@ \"%@", selectedText, [item title]];
+    for (id i in activityItems) {
+        Log(@"activityItems = %@", i);
+        if ([i isMemberOfClass:%c(BLSendActivityItemSource)])
+            item = i;
     }
-    Log(@"string = %@", string);
-    Log(@"item = %@", item);
-    if (!item) {
-        return %orig;
-    }
+
+    NSString *string = [NSString stringWithFormat:@"%@ \"%@ - %@", [item selection] ?: @"", [[item associatedItem] source], [item title]];
     NSArray *array = @[string, item];
+
     return %orig(array, applicationActivities);
 }
 %end
 
-// for iOS 4 and 5.
-%hook BLTweet
-- (BLTweet *)initWithURL:(NSURL *)url text:(NSString *)selectedText
+static UIView *TweetTextView(UIView *view)
 {
-    if (tweetFormatterIsEnabled) {
-        BLGoogleReaderItem *item = [[((BLApplicationController *)[[UIApplication sharedApplication] delegate]) itemViewController] item];
-        NSString *string = [NSString stringWithFormat:@"%@ \"%@ - %@", selectedText, [item source], [item title]];
-        return %orig(url, string);
-    } else {
-        return %orig;
-    }
-}
-%end
+    if ([view isFirstResponder])
+        return view;
 
-// for iOS 4 and 5.
-// Forced url shorten and set caret to top.
-%hook BLTweetViewController
-- (void)fixSelectedRange
+    for (UIView *v in view.subviews) {
+        UIView *vv = TweetTextView(v);
+        if (vv)
+            return vv;
+    }
+
+    return nil;
+}
+
+%hook UIView
+- (void)layoutSubviews
 {
     %orig;
-    if (tweetFormatterIsEnabled) {
-        BLTweet *tweet = [self tweet];
-        [[%c(BLWebServices) sharedInstance] shortenTweet:tweet];
-        UITextView *tv = MSHookIvar<UITextView *>(self, "_textView");
-        [tv setSelectionToStart];
-        //[tv insertText:@" "];
-        //[tv setSelectionToStart];
+
+    if ([self isMemberOfClass:%c(SLTwitterExpandedHitTestView)]) {
+        UITextView *textView = TweetTextView([UIApplication sharedApplication].keyWindow);
+        // avoid private API.
+        //[textView setSelectionToStart];
+        textView.selectedTextRange = [textView textRangeFromPosition:textView.beginningOfDocument toPosition:textView.beginningOfDocument];
     }
 }
 %end
